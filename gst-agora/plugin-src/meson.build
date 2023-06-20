@@ -27,8 +27,8 @@ gstagorasink = library('gstagorasink',
   install : true,
   install_dir : plugins_install_dir,
   objects: [
-        '/usr/local/lib/libagorac.so',
-        '/usr/local/lib/libagora_rtc_sdk.so',
+        '/usr/local/lib/lite/libagora_rtsac.so',
+        '/usr/local/lib/lite/libagora-rtc-sdk.so',
     ]
 )
 
@@ -50,8 +50,8 @@ gstagorasrc = library('gstagorasrc',
   install : true,
   install_dir : plugins_install_dir,
   objects: [
-        '/usr/local/lib/libagorac.so',
-        '/usr/local/lib/libagora_rtc_sdk.so',
+        '/usr/local/lib/lite/libagora_rtsac.so',
+        '/usr/local/lib/lite/libagora-rtc-sdk.so',
     ]
 )
 
@@ -74,8 +74,8 @@ gstagorio = library('gstagoraio',
   install : true,
   install_dir : plugins_install_dir,
   objects: [
-        '/usr/local/lib/libagorac.so',
-        '/usr/local/lib/libagora_rtc_sdk.so',
+        '/usr/local/lib/lite/libagora_rtsac.so',
+        '/usr/local/lib/lite/libagora-rtc-sdk.so',
     ]
 )
 
@@ -95,8 +95,8 @@ gstagorioudp = library('gstagoraioudp',
   install : true,
   install_dir : plugins_install_dir,
   objects: [
-        '/usr/local/lib/libagorac.so',
-        '/usr/local/lib/libagora_rtc_sdk.so',
+        '/usr/local/lib/lite/libagora_rtsac.so',
+        '/usr/local/lib/lite/libagora-rtc-sdk.so',
     ]
 )
 

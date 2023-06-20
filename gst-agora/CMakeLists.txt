@@ -8,7 +8,7 @@ add_definitions(-DHAVE_CONFIG_H=1)
 set(INSTALL_PATH $ENV{INSTALL_PATH})
 if(NOT INSTALL_PATH)
   message("install directory not set, will use  /usr/local/lib/x86_64-linux-gnu/gstreamer-1.0/ to install")
-  set (INSTALL_PATH /usr/local/lib/x86_64-linux-gnu/gstreamer-1.0/)
+  set (INSTALL_PATH /usr/local/lib/x86_64-linux-gnu/lite/gstreamer-1.0/)
 endif()
 
 find_package(PkgConfig REQUIRED)
@@ -35,9 +35,8 @@ set(LIBS
         ${GSTREAMER_APP_LDFLAGS}
         ${GSTREAMER_SDP_LDFLAGS}
         ${GSTREAMER_BASE_LDFLAGS}
-        ${INSTALL_PATH}/lib/libagorac.so
-        ${INSTALL_PATH}/lib/libagora_rtc_sdk.so
-        ${INSTALL_PATH}/lib/libagora-ffmpeg.so
+        ${INSTALL_PATH}/../../lite/libagora_rtsac.so
+        ${INSTALL_PATH}/../../lite/libagora-rtc-sdk.so
         x264
         swscale
         opus

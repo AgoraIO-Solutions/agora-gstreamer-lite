@@ -195,7 +195,6 @@ int init_agora(Gstagorasrc * src){
    config.enableProxy=FALSE;                    /*enable proxy*/
    config.proxy_timeout= 0;                     /*proxy timeout*/
    config.proxy_ips= "";                        /*proxy ips*/
-   config.transcode=FALSE;                      /*proxy ips*/  
 
 
     /*initialize agora*/

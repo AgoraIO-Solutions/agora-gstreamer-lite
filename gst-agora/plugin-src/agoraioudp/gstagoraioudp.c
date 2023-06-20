@@ -348,7 +348,6 @@ int init_agora(Gstagoraioudp *agoraIO){
    config.enableProxy=agoraIO->proxy;           /*enable proxy*/
    config.proxy_timeout= agoraIO->reconnect_timeout;   /*proxy timeout*/
    config.proxy_ips= agoraIO->proxy_ips;               /*proxy ips*/
-   config.transcode=agoraIO->transcode;                /*proxy ips*/  
 
     /*initialize agora*/
    agoraIO->agora_ctx=agoraio_init(&config);

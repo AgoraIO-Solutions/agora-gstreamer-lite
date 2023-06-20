@@ -429,7 +429,6 @@ int init_agora(Gstagorasink * filter){
    config.enableProxy=FALSE;                    /*enable proxy*/
    config.proxy_timeout= 0;                     /*proxy timeout*/
    config.proxy_ips= "";                        /*proxy ips*/
-   config.transcode=filter->transcode;          /*proxy ips*/  
    
    /*initialize agora*/
    filter->agora_ctx=agoraio_init(&config);    
@@ -536,9 +535,6 @@ gst_agorasink_get_property (GObject * object, guint prop_id,
     case CONVERT_AVC_TO_ANNEX_B:
          g_value_set_boolean (value, filter->convert_avc_to_annexb);
          break;
-    case TRANSCODE:
-        g_value_set_boolean (value, filter->transcode);
-        break;
     default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
