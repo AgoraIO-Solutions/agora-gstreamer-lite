@@ -22,8 +22,8 @@ gst-launch-1.0 -v videotestsrc pattern=ball is-live=true ! video/x-raw,format=I4
 ## Build and install agora gstreamer plugins
    After installing the libraries above on your Ubuntu system         
    Clone this repo using git clone       
-   cd agora-gstreamer     
-  ./build_all_3.8.2.sh   # change to latest version  (or ARM if required)
+   cd agora-gstreamer-lite     
+  ./build_rtsa_lite_180.sh
   
   If no errors are printed the new agora gs plugins will be installed on the system ready for use
 
@@ -46,7 +46,7 @@ gst-launch-1.0 -v videotestsrc pattern=ball is-live=true ! video/x-raw,format=I4
 ## Run and test
 You must always run the following export before using any of these plugins     
 
-   export GST_PLUGIN_PATH=/usr/local/lib/x86_64-linux-gnu/gstreamer-1.0   
+   export GST_PLUGIN_PATH=/usr/local/lib/x86_64-linux-gnu/lite/gstreamer-1.0   
    
 
  ## agoraioudp
@@ -166,6 +166,7 @@ gst-launch-1.0 -v videotestsrc pattern=ball is-live=true ! video/x-raw,format=I4
  gst_agorasink_chain(...) in gstagorasink.c  is the main logic and entrypoint    
  meson.build specifies the files to be built    
  agorac.cpp is related to RTMPG project which we use here as a .so library  
+//TODO: below needs update for IoT SDK
  Uses this SDK wget https://download.agora.io/sdk/release/Agora-RTC-x86_64-linux-gnu-v3.4.217.tgz     
  tar -xvzf Agora-RTC-x86_64-linux-gnu-v3.4.217.tgz   
  sudo apt install cmake    
