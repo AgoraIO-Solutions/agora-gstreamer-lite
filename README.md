@@ -120,7 +120,7 @@ gst-launch-1.0 rtspsrc location=rtsp://admin:eee@1.2.3.4:2036/Streaming/Channels
 gst-launch-1.0  rtspsrc location=rtsp://admin:rrr@1.2.21.50:6005/Streaming/Channels/102 latency=0 buffer-mode=auto ! rtph264depay ! h264parse ! video/x-h264, stream-format=avc, alignment=au ! agorasink appid=20b7c51ff4c644ab80cf5a4e646b0537 channel=test2 avc-to-annexb=true       
 
 
- ## agorasrc
+ ## agorasrc //TODO
 
 <ins>Video out of Agora:</ins>    
    agorasrc can be used to read encoded h264 from an agora channel, here is an example pipleline:     
@@ -131,7 +131,7 @@ gst-launch-1.0  rtspsrc location=rtsp://admin:rrr@1.2.21.50:6005/Streaming/Chann
 
    where appid and channel is same as agorasink. 
    
- <ins>Audio out of Agora</ins>
+ <ins>Audio out of Agora</ins> //TODO
  
    gst-launch-1.0 agorasrc audio=true verbose=false appid=xxx channel=gstreamer ! filesink location=test.raw     
    
@@ -158,68 +158,27 @@ v4l2-ctl --list-devices
 
 gst-launch-1.0 -v videotestsrc pattern=ball is-live=true ! video/x-raw,format=I420,width=1280,height=720,framerate=60/1 ! videoconvert ! x264enc key-int-max=60 tune=zerolatency !  queue ! decodebin ! queue ! autovideosink
 
-
- 
- ## Developer Notes
- https://docs.agora.io/cn/RTSA/downloads?platform=Linux
+ ## Developer Notes for Agora IoT
  
  gst_agorasink_chain(...) in gstagorasink.c  is the main logic and entrypoint    
  meson.build specifies the files to be built    
  agorac.cpp is related to RTMPG project which we use here as a .so library  
-//TODO: below needs update for IoT SDK
- Uses this SDK wget https://download.agora.io/sdk/release/Agora-RTC-x86_64-linux-gnu-v3.4.217.tgz     
- tar -xvzf Agora-RTC-x86_64-linux-gnu-v3.4.217.tgz   
- sudo apt install cmake    
- sudo apt-get update    
- sudo apt-get install -y build-essential     
- cd  agora_rtc_sdk/example        
- ./build-x86_64.sh    
- LD_LIBRARY_PATH=/home/ben/agora_rtc_sdk/agora_sdk    
- export LD_LIBRARY_PATH     
- test data https://drive.google.com/file/d/1m1PzTCiV1AKy_mVYZA5la9WQtZu-acKI/view?usp=sharing     
-./sample_send_h264_dual_stream --token xxxx --channelId iii --HighVideoFile ~/pro/agora_rtc_sdk/example/test_data/send_video.h264 --LowVideoFile ~/pro/agora_rtc_sdk/example/test_data/send_video.h264
+1. Install the build-essential package
+ sudo apt update && sudo apt install build-essential
+2. Ensure cmake v3.6.0 or above is installed.
+ sudo apt remove cmake
+ sudo apt install cmake
+3. Download the appropriate SDK package 
+ https://docs.agora.io/en/sdks?platform=linux
+4. Extract the package
+ tar -xvzf Agora-RTSALite-AutAcAj-x86_64-linux-gnu-v1.8.0.tgz to agora-gstreamer-lite/agora/sdk
+5. build and run the sample code
+ cd agora_rtsa_sdk/example/
+ ./build-x86_64.sh
+ cd out/x86_64
+ ./hello_rtsa --app-id <your-app-id> --channel-id <your-channel-name> --token <authentication-token>
+ 
+SDK Log in out/x86_64/io.agora.rtc_sdk
 
- 20b7c51ff4c644ab80cf5a4e646b05377
-
-SDK Log ~/.agora/agorasdk.log
-
-Jetson: Linux kernel architecture is aarch64 / arm64 (64-bit) (?)
-PiL: gnueabihf (?)
-
-
-## Creating and installing a binary release:
-
-To create a binary release:
-
-cd release
-./make-release
-
-To install the release on the target machine:
-
-cd release
-./install
-
-
-## Cross compilation of Arm (Target) on x86 (Host)
-
-(1) install gcc and G++ for arm 
-
-sudo apt-get install gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
-
-(2) make sure you set the environment variable INSTALL_PATH where the library will be copied to:
-
-for example:
-
-export INSTALL_PATH=/home/ubuntu/arm-dist
-
-(3) copy  the dir /usr/include/aarch64-linux-gnu from the target to the host
-
-this will allow g++-aarch64-linux-gnu to find the required libraries on the host
-
-(4) compile libagorac by specifying arm config in cmake:
-
-mkdir build && cd build && cmake -DCMAKE_TOOLCHAIN_FILE=arm64.cmake .. && make && sudo make install
-
-(5) copy the installation files from host to target and test there
-
-
+Please refer to the following page for more info.
+ https://docs.agora.io/en/iot/get-started/get-started-sdk?platform=linux-c#test-your-implementation
