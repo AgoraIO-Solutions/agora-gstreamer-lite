@@ -111,6 +111,7 @@ typedef struct {
 	bool receive_data_only;
 
 	const char *license;
+	const char *pid;
 } app_config_t;
 
 typedef struct {
@@ -131,7 +132,7 @@ static app_t g_app = {
     .config = {
         // common config
         .p_sdk_log_dir              = "io.agora.rtc_sdk",
-        .p_appid                    = "d6b10eddcf514ca79254ed90936fdcef",
+	.p_appid                    = "",
         .p_token                    = "",
         .p_channel                  = DEFAULT_CHANNEL_NAME,
         .uid                        = 0,
@@ -156,7 +157,8 @@ static app_t g_app = {
         .enable_audio_mixer         = false,
         .receive_data_only          = false,
 
-        .license                    = "eyJzaWduIjoiUGxtdmY4Y1k2eEROK3U1TTBLdVlsQm8yMzJiT0Y1TVh1dGxCVXZOR1AwcmJwN0NDVkZNNlRLT0Qrc3Z3Vmk1L3VGTWxPVG4zY1BQZGRIQTEwOGlJTWhFVGViZjY3Vzdxam5TckFxVG1rcmh1WmFFMnBUWDg2NXd0QjZrVDJSbnBtTVgxTGdia21sdXh0eVZheWVSVkNXT1preW1Mb1JqMk1xRjgrTG4wZ0k2SG54djFYYjVmNWFDZndPMUpHLzhVSHBkTnJwSndtN0NBdXFQWVQ5Z1hlUzhVZnI5UnErLyt6d0VOblIxQ0tteVpiSGVsQWMwYmI3aTJMSHZYRTcvZG1YVWxoRGxUandTVGRHQU9Wa1J1d241MGZIWnVKcnA3NHFGUm5GYS9UWjhobDNjT240dHpuTGU2MXBTMGJxbXFYbnU5cS9rVVJ4SVZVYnErekNraE53PT0iLCJjdXN0b20iOiIxMTAwNzciLCJjcmVkZW50aWFsIjoiNGE1ZmEyZWVkZGQyYjJjOWM3YzQxOTlhYWQ0ODIwNWI5YjBjOWJiMTllYWVmZGVhNDk5NmFhOTlmNmRkOTI1MiIsImR1ZSI6IjIwNzEwNTI3In0=",
+        .license                    = "",
+        .pid                        = "",
     },
 
     .video_file_parser      = NULL,
@@ -511,29 +513,36 @@ bool AgoraIo::initAgoraService(const std::string& appid)
     config->p_appid = appid.c_str();
     int appid_len = strlen(config->p_appid);
     const char *p_appid = (appid_len == 0 ? NULL : config->p_appid);
-    
-    logMessage("Agora RTSA SDK version: " + str);
-    // TODO: API: verify license
-#if 0
-    	if(verifyLicense() != 0) {
-      return false;
-    }
-#endif
+    FILE *fp;
 
+    logMessage("Agora RTSA SDK version: " + str);
     rtc_service_option_t service_opt = { 0 };
     agora_rtc_event_handler_t event_handler = { 0 };
-	app_init_event_handler(&event_handler, config);
-	service_opt.area_code = config->area;
-	service_opt.log_cfg.log_path = config->p_sdk_log_dir;
-        service_opt.log_cfg.log_level = RTC_LOG_INFO;
-	snprintf(service_opt.license_value, sizeof(service_opt.license_value), "%s", config->license);
-	str = p_appid;
-    logMessage("init with appID: " + appid + str);
-	rval = agora_rtc_init(p_appid, &event_handler, &service_opt);
-	if (rval < 0) {
-	  logMessage("Failed to initialize Agora sdk, reason: {}" + std::to_string(rval));
-          return false;
-	}
+    app_init_event_handler(&event_handler, config);
+    service_opt.area_code = config->area;
+    service_opt.log_cfg.log_path = config->p_sdk_log_dir;
+    service_opt.log_cfg.log_level = RTC_LOG_INFO;
+    // Read license from a file
+    if ( (fp = fopen("license_value.txt", "r")) == NULL){
+        logMessage("Read license file failed");
+        return false;
+    } else {
+	config->license = (const char*)malloc(sizeof(service_opt.license_value));
+        fread((void *)config->license, 1, sizeof(service_opt.license_value), fp);
+	str = config->license;
+        //LOGI("[Agora RTSA license%s ]",  config->license);
+        logMessage("Agora RTSA license: " + str);
+    }
+    snprintf(service_opt.license_value, sizeof(service_opt.license_value), "%s", config->license);
+    //snprintf(service_opt.product_id, sizeof(service_opt.product_id), "%s", config->pid);
+    fclose(fp);
+
+    logMessage("init with appID: " + appid);
+    rval = agora_rtc_init(appid.c_str(), &event_handler, &service_opt);
+    if (rval < 0) {
+       logMessage("Failed to initialize Agora sdk, reason: {}" + std::to_string(rval));
+       return false;
+    }
     return true;
 }
 
