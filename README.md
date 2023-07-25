@@ -44,10 +44,11 @@ gst-launch-1.0 -v videotestsrc pattern=ball is-live=true ! video/x-raw,format=I4
  
 
 ## Run and test
-You must always run the following export before using any of these plugins     
+1. You must always run the following export before using any of these plugins
 
    export GST_PLUGIN_PATH=/usr/local/lib/x86_64-linux-gnu/lite/gstreamer-1.0   
    
+2. Add a license file license_value.txt under git repo root agora-gstreamer-lite dir and fill in the license for this device
 
  ## agoraioudp
 
